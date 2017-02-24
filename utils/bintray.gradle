@@ -1,0 +1,54 @@
+apply plugin: 'com.novoda.bintray-release'
+
+// javadoc configuration
+
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+javadoc {
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+        author true
+        version "0.0.1"
+        links "http://docs.oracle.com/javase/7/docs/api"
+        title "widget-datepick"
+    }
+}
+
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType(Javadoc) {
+    options.encoding = "UTF-8"
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+publish {
+    userOrg = 'yincs'
+    groupId = 'changs.android'
+    artifactId = 'utils'
+    publishVersion = '0.0.1'
+    desc = 'This is an android utils'
+    website = 'https://github.com/yincs/Android-Utils'
+}
+
+
